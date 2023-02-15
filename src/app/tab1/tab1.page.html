@@ -1,0 +1,103 @@
+<ion-header [translucent]="true" color="white">
+  <!-- titler toolbar -->
+  <ion-toolbar color="success">
+    <!-- title for songs page or tab1 -->
+    <ion-title>
+      <i style="font-family: 'Times New Roman', Times, serif;"> PlayPod </i>
+    </ion-title>
+  </ion-toolbar>
+
+  <!-- buttons for select a list of songs -->
+  <ion-grid [fixed]="true">
+    <!-- set a grid-row for buttons -->
+    <ion-row>
+      <!-- set col for grid row -->
+      <ion-col size="2.5" style="margin:0; padding: 0; max-width: fit-content; min-width: fit-content;">
+        <!-- set button -->
+        <ion-button style=" color: white; background-color: orangered; padding: 0; border-radius: 4px;"
+          (click)="marathi()"> Marathi
+        </ion-button>
+      </ion-col>
+
+      <!-- set col for grid row -->
+      <ion-col size="2.5" style="margin:0; padding: 0; max-width: fit-content; min-width: fit-content;">
+        <!-- set button -->
+        <ion-button style=" color: white; background-color: orangered; padding: 0; border-radius: 4px;"
+          (click)="southindian()"> SouthInd
+        </ion-button>
+      </ion-col>
+
+      <!-- set col for grid row -->
+      <ion-col size="2.5" style="margin:0; padding: 0; max-width: fit-content; min-width: fit-content;">
+        <!-- set button -->
+        <ion-button style=" color: white; background-color: orangered; padding: 0; border-radius: 4px;"
+          (click)="punjabi()"> Punjabi
+        </ion-button>
+      </ion-col>
+
+      <!-- set col for grid row -->
+      <ion-col size="2.5" style="margin:0; padding: 0; max-width: fit-content; min-width: fit-content;">
+        <!-- set button -->
+        <ion-button style=" color: white; background-color: orangered; padding: 0; border-radius: 4px;"
+          (click)="bollywood()"> Hindi
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<!-- content of page -->
+<ion-content [fullscreen]="true">
+
+  <!-- show a currently playing songs -->
+  <div id="play-slide" *ngIf="viewhide == false">
+    <!-- close button for card of current playing songs -->
+    <ion-button (click)="closeview()">Close</ion-button>
+    <!-- content of card (currently playing song) -->
+    <ion-content>
+      <!-- get img of selected song -->
+      <img src="{{view}}" alt="" height="100%" width="100%">
+    </ion-content>
+
+    <!-- loading slider for playing songs -->
+    <ion-progress-bar [ariaValueMin]="0" [ariaValueMax]="state.duration" step="1" [value]="state.currentTime"
+      (input)="onSliderChangeEnd($event)" [ariaDisabled]="state.error || currentFile.index === undefined">
+    </ion-progress-bar>
+
+    <!-- buttons to manage song play pause next previous -->
+    <div>
+      <ion-icon (click)="previous()" name="play" style="transform: rotate(180deg);"></ion-icon>
+      <ion-icon (click)="play()" *ngIf="!state?.playing" name="play"></ion-icon>
+      <ion-icon (click)="pause()" *ngIf="state?.playing" name="pause"></ion-icon>
+      <ion-icon (click)="next()" name="play"></ion-icon>
+      <p>{{state.readableCurrentTime}}</p>
+    </div>
+  </div>
+
+  <!-- hide show list when select song to play or close card of playing song -->
+  <div *ngIf="viewhide == true">
+    <!-- list of songs -->
+    <ion-list id="ion_list" *ngFor="let file of files; let i = index" (click)="openFile(file, i,file.img)"
+      style="border-bottom: 1px solid">
+
+      <!-- img of songs -->
+      <img src="{{file.img}}" alt="">
+      
+      <!-- details of songs -->
+      <div id="details">
+        <ion-icon name="musical-notes"></ion-icon>
+        
+        <!-- songs name -->
+        <p ion-line>{{file.name}}</p>
+        <ion-icon *ngIf="currentFile.index === i && !state?.error" name="volume_up" color="accent"></ion-icon>
+        
+        <!-- if error in playing songs display error -->
+        <p *ngIf="currentFile.index === i && state?.error">ERROR</p>
+      </div>
+
+      <!-- artist name -->
+      <p ion-line>{{file.artist}}</p>
+    </ion-list>
+  </div>
+  <!-- <app-explore-container name="Tab 1 page"></app-explore-container> -->
+</ion-content>
